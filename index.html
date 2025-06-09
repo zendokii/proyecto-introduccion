@@ -1,15 +1,756 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mi tienda ne linea</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ELECTRONICS - Tienda de Dispositivos Electrónicos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Inter&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --clr-primary: #1e40af;
+      --clr-secondary: #2563eb;
+      --clr-gray-dark: #374151;
+      --clr-gray-medium: #6b7280;
+      --clr-gray-light: #f3f4f6;
+      --white: #ffffff;
+      --radius: 0.75rem;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --max-width: 1200px;
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--white);
+      color: var(--clr-gray-dark);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--clr-gray-light);
+      z-index: 1000;
+      box-shadow: var(--shadow-light);
+    }
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--clr-primary);
+      user-select: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .nav-links a, .nav-links button {
+      color: var(--clr-gray-dark);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      transition:
+        background-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+      user-select: none;
+      text-decoration: none;
+    }
+    .nav-links a:hover, .nav-links button:hover,
+    .nav-links a:focus, .nav-links button:focus {
+      outline: none;
+      color: var(--clr-primary);
+      background-color: var(--clr-gray-light);
+      transform: scale(1.05);
+    }
+    .cart-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      color: var(--clr-gray-dark);
+    }
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background-color: var(--clr-secondary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0 6px;
+      border-radius: 9999px;
+      user-select: none;
+      pointer-events: none;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: var(--max-width);
+      margin: 2rem auto 4rem;
+      padding: 0 1rem;
+      width: 100%;
+    }
+    h1, h2 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--clr-primary);
+      line-height: 1.1;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      user-select: none;
+      text-align: center;
+    }
+    h2 {
+      font-size: 2.25rem;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      color: var(--clr-gray-medium);
+      font-size: 1.125rem;
+      margin-bottom: 1.75rem;
+      max-width: 720px;
+    }
+
+    /* Products grid and cards */
+    #catalogo {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+      gap: 1.75rem;
+    }
+    .card {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      user-select: none;
+    }
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+      outline: none;
+    }
+    .card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0px 2px 2px rgb(0 0 0 / 0.05));
+      pointer-events: none;
+      user-select: none;
+    }
+    .card h3 {
+      margin: 0.5rem 0 0.25rem;
+      font-weight: 700;
+      color: var(--clr-primary);
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin: 0.5rem 0 1rem;
+      font-size: 1rem;
+      color: var(--clr-gray-dark);
+    }
+    .card .price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--clr-secondary);
+      margin-bottom: 1rem;
+    }
+    .btn-add {
+      background-color: var(--clr-primary);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background-color var(--transition);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      user-select: none;
+    }
+    .btn-add:hover,
+    .btn-add:focus {
+      background-color: var(--clr-secondary);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Quienes Somos */
+    #quienes-somos {
+      max-width: 720px;
+      margin: 3rem auto 0;
+      padding-top: 1rem;
+      border-top: 1px solid var(--clr-gray-light);
+      text-align: center;
+    }
+    #quienes-somos p {
+      margin: 0.5rem auto 1rem;
+      font-size: 1.1rem;
+      max-width: 600px;
+      color: var(--clr-gray-medium);
+    }
+    #quienes-somos strong {
+      color: var(--clr-primary);
+    }
+
+    /* Contacto */
+    #contacto {
+      max-width: 720px;
+      margin: 3rem auto 3rem;
+      padding: 1rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+    }
+    #contacto h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    #contacto p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      color: var(--clr-gray-dark);
+    }
+    #contacto form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    #contacto label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--clr-primary);
+      user-select: none;
+    }
+    #contacto input, #contacto textarea {
+      padding: 0.6rem;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--clr-gray-light);
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      resize: vertical;
+    }
+    #contacto input:focus, #contacto textarea:focus {
+      outline: none;
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 6px var(--clr-primary);
+    }
+    #contacto button {
+      width: max-content;
+      background-color: var(--clr-primary);
+      color: var(--white);
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.65rem 1.5rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      align-self: center;
+      transition: background-color var(--transition), transform var(--transition);
+      user-select: none;
+    }
+    #contacto button:hover,
+    #contacto button:focus {
+      background-color: var(--clr-secondary);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--clr-primary);
+      color: var(--white);
+      text-align: center;
+      padding: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+    }
+
+    /* Carrito lateral */
+    #cart {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      max-width: 100vw;
+      height: 100vh;
+      background: var(--white);
+      box-shadow: -3px 0 15px rgba(0,0,0,0.2);
+      transform: translateX(100%);
+      transition: transform 0.35s var(--transition);
+      display: flex;
+      flex-direction: column;
+      z-index: 1100;
+      border-radius: 0 0 0 var(--radius);
+    }
+    #cart.open {
+      transform: translateX(0);
+    }
+    #cart header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--clr-gray-light);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--clr-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    #cart header button {
+      font-size: 1.5rem;
+      color: var(--clr-secondary);
+      border-radius: 50%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      line-height: 1;
+      padding: 0 0.5rem 0 0.5rem;
+    }
+    #cart header button:hover, #cart header button:focus {
+      background-color: var(--clr-gray-light);
+      outline: none;
+      transform: scale(1.3);
+    }
+    #cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--clr-gray-light);
+    }
+    .cart-item span.name {
+      font-weight: 600;
+      color: var(--clr-primary);
+    }
+    .cart-item span.qty {
+      color: var(--clr-gray-dark);
+    }
+    .cart-item span.price {
+      font-weight: 700;
+      color: var(--clr-secondary);
+      margin-left: 1rem;
+      min-width: 60px;
+      text-align: right;
+    }
+    .cart-item button.remove-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.2rem;
+      transition: color 0.25s ease;
+      user-select: none;
+      margin-left: 8px;
+    }
+    .cart-item button.remove-btn:hover,
+    .cart-item button.remove-btn:focus {
+      color: #b91c1c;
+      outline: none;
+    }
+    #checkout {
+      border-top: 1px solid var(--clr-gray-light);
+      padding: 1rem 1.5rem;
+    }
+    #checkout label {
+      display: block;
+      font-weight: 600;
+      color: var(--clr-primary);
+      margin-bottom: 6px;
+      user-select: none;
+    }
+    #checkout input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--clr-gray-light);
+      font-family: 'Inter', sans-serif;
+      transition: border-color var(--transition);
+    }
+    #checkout input:focus {
+      outline: none;
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 6px var(--clr-primary);
+    }
+    #checkout button {
+      width: 100%;
+      background-color: var(--clr-primary);
+      color: var(--white);
+      font-weight: 700;
+      border-radius: var(--radius);
+      border: none;
+      font-size: 1.1rem;
+      padding: 0.65rem;
+      cursor: pointer;
+      transition: background-color var(--transition), transform var(--transition);
+      user-select: none;
+    }
+    #checkout button:hover,
+    #checkout button:focus {
+      background-color: var(--clr-secondary);
+      outline: none;
+      transform: scale(1.05);
+    }
+
+    /* Para pantallas pequeñas */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 2.25rem;
+      }
+      h2 {
+        font-size: 1.75rem;
+      }
+      #catalogo {
+        grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
+      }
+      .card img {
+        width: 100px;
+        height: 100px;
+      }
+      #cart {
+        width: 100vw;
+        border-radius: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-    
 
-<h1>Mi tienda en linea </h1> 
+<header>
+  <div class="container">
+    <nav aria-label="Navegación principal">
+      <div class="logo" aria-label="Logo ELECTRONICS">ELECTRONICS</div>
+      <div class="nav-links">
+        <a href="#quienes-somos">Quiénes Somos</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#contacto">Contáctenos</a>
+        <button id="cartToggleBtn" aria-label="Abrir carrito de compras" class="cart-btn" aria-expanded="false" aria-controls="cart">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart" width="24" height="24" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-count" id="cartCount" aria-live="polite" aria-atomic="true">0</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
 
+<main class="container">
+  <h1>Catálogo de Productos</h1>
+  <section id="catalogo" aria-label="Catálogo de productos">
+    <!-- Productos generados por JS -->
+  </section>
+
+  <section id="quienes-somos" aria-label="Quiénes Somos">
+    <h2>Quiénes Somos</h2>
+    <p><strong>Misión:</strong> Proporcionar a nuestros clientes los mejores dispositivos electrónicos con un servicio excepcional.</p>
+    <p><strong>Visión:</strong> Ser la tienda en línea líder en tecnología, ofreciendo productos de alta calidad y atención al cliente.</p>
+    <p><strong>Descripción:</strong> ELECTRONICS es una tienda en línea dedicada a ofrecer una amplia gama de dispositivos electrónicos.</p>
+    <p><strong>Marcas:</strong> Apple, Samsung, Sony, Microsoft.</p>
+  </section>
+
+  <section id="contacto" aria-label="Contáctenos">
+    <h2>Contáctenos</h2>
+    <p>Teléfono: (123) 456-7890</p>
+    <p>Correo Electrónico: contacto@electronics.com</p>
+    <form id="contactForm" aria-label="Formulario de contacto">
+      <label for="contactName">Nombre:</label>
+      <input type="text" id="contactName" name="contactName" required autocomplete="name" />
+      <label for="contactEmail">Correo Electrónico:</label>
+      <input type="email" id="contactEmail" name="contactEmail" required autocomplete="email" />
+      <label for="contactMessage">Mensaje:</label>
+      <textarea id="contactMessage" name="contactMessage" rows="4" required></textarea>
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+  </section>
+</main>
+
+<aside id="cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1" hidden>
+  <header>
+    <h2 id="cartTitle">Carrito de Compras</h2>
+    <button id="closeCartBtn" aria-label="Cerrar carrito">&times;</button>
+  </header>
+  <div id="cart-items" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+  <div id="checkout">
+    <label for="userName">Nombre:</label>
+    <input type="text" id="userName" name="userName" autocomplete="name" required />
+    <label for="userUsername">Usuario:</label>
+    <input type="text" id="userUsername" name="userUsername" autocomplete="username" required />
+    <button id="checkoutBtn">Finalizar Compra</button>
+  </div>
+</aside>
+
+<script>
+  const products = [
+    {
+      id: 1,
+      name: 'Smartphone Ultra X',
+      description: 'Potente teléfono con cámara de alta resolución y batería de larga duración.',
+      price: 699,
+      image: 'https://cdn-icons-png.flaticon.com/512/888/888857.png',
+    },
+    {
+      id: 2,
+      name: 'Laptop ProBook 15',
+      description: 'Rendimiento óptimo para profesionales y creativos en movimiento.',
+      price: 999,
+      image: 'https://cdn-icons-png.flaticon.com/512/1055/1055687.png',
+    },
+    {
+      id: 3,
+      name: 'Auriculares Wireless',
+      description: 'Sonido nítido y conexión estable sin enredos de cables.',
+      price: 199,
+      image: 'https://cdn-icons-png.flaticon.com/512/716/716784.png',
+    },
+    {
+      id: 4,
+      name: 'Smartwatch Fit',
+      description: 'Monitoreo de salud y notificaciones en la muñeca.',
+      price: 299,
+      image: 'https://cdn-icons-png.flaticon.com/512/701/701982.png',
+    },
+    {
+      id: 5,
+      name: 'Tablet Plus',
+      description: 'Pantalla grande y alta resolución para tus tareas y entretenimiento.',
+      price: 499,
+      image: 'https://cdn-icons-png.flaticon.com/512/3064/3064197.png',
+    },
+    {
+      id: 6,
+      name: 'Cámara Digital Zoom',
+      description: 'Captura fotos y videos con calidad profesional.',
+      price: 799,
+      image: 'https://cdn-icons-png.flaticon.com/512/2920/2920229.png',
+    },
+    {
+      id: 7,
+      name: 'Altavoz Bluetooth',
+      description: 'Sonido potente en un diseño compacto y portátil.',
+      price: 149,
+      image: 'https://cdn-icons-png.flaticon.com/512/727/727240.png',
+    },
+    {
+      id: 8,
+      name: 'Disco Duro Externo',
+      description: 'Almacenamiento seguro y rápido para tus archivos importantes.',
+      price: 129,
+      image: 'https://cdn-icons-png.flaticon.com/512/833/833524.png',
+    },
+  ];
+
+  /* Variables interfaz */
+  const catalogoSection = document.getElementById('catalogo');
+  const cartToggleBtn = document.getElementById('cartToggleBtn');
+  const cartPanel = document.getElementById('cart');
+  const closeCartBtn = document.getElementById('closeCartBtn');
+  const cartCount = document.getElementById('cartCount');
+  const cartItemsDiv = document.getElementById('cart-items');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const userNameInput = document.getElementById('userName');
+  const userUsernameInput = document.getElementById('userUsername');
+  const contactForm = document.getElementById('contactForm');
+
+  // Estado carrito
+  let cart = [];
+
+  // Generar el catálogo
+  function renderCatalog() {
+    catalogoSection.innerHTML = '';
+    products.forEach(product => {
+      const productCard = document.createElement('article');
+      productCard.className = 'card';
+      productCard.tabIndex = 0;
+      productCard.innerHTML = `
+        <img src="${product.image}" alt="${product.name}" loading="lazy" />
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <div class="price">$${product.price.toFixed(2)}</div>
+        <button class="btn-add" data-id="${product.id}" aria-label="Agregar ${product.name} al carrito">Agregar al carrito</button>
+      `;
+      catalogoSection.appendChild(productCard);
+    });
+  }
+
+  // Actualizar contador carrito
+  function updateCartCount() {
+    const totalCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+    cartCount.textContent = totalCount;
+  }
+
+  // Generar items del carrito
+  function renderCartItems() {
+    cartItemsDiv.innerHTML = '';
+    if (cart.length === 0) {
+      cartItemsDiv.innerHTML = '<p>Tu carrito está vacío.</p>';
+      return;
+    }
+    cart.forEach(item => {
+      const product = products.find(p => p.id === item.productId);
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'cart-item';
+      itemDiv.innerHTML = `
+        <span class="name">${product.name}</span>
+        <span class="qty">x${item.quantity}</span>
+        <span class="price">$${(product.price * item.quantity).toFixed(2)}</span>
+        <button class="remove-btn" aria-label="Eliminar ${product.name} del carrito" data-id="${item.productId}">&times;</button>
+      `;
+      cartItemsDiv.appendChild(itemDiv);
+    });
+  }
+
+  // Añadir producto al carrito
+  function addToCart(productId) {
+    const existingItem = cart.find(item => item.productId === productId);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ productId, quantity: 1 });
+    }
+    updateCartCount();
+    renderCartItems();
+    openCart();
+  }
+
+  // Eliminar producto del carrito
+  function removeFromCart(productId) {
+    cart = cart.filter(item => item.productId !== productId);
+    updateCartCount();
+    renderCartItems();
+  }
+
+  // Abrir carrito y set aria-expanded
+  function openCart() {
+    cartPanel.classList.add('open');
+    cartPanel.hidden = false;
+    cartPanel.focus();
+    cartToggleBtn.setAttribute('aria-expanded', 'true');
+  }
+  // Cerrar carrito
+  function closeCart() {
+    cartPanel.classList.remove('open');
+    cartPanel.hidden = true;
+    cartToggleBtn.setAttribute('aria-expanded', 'false');
+    cartToggleBtn.focus();
+  }
+
+  // Event listener botones agregar carrito
+  catalogoSection.addEventListener('click', e => {
+    if (e.target.classList.contains('btn-add')) {
+      const id = Number(e.target.dataset.id);
+      addToCart(id);
+    }
+  });
+  // Abrir o cerrar carrito desde botón header
+  cartToggleBtn.addEventListener('click', () => {
+    if (cartPanel.classList.contains('open')) {
+      closeCart();
+    } else {
+      openCart();
+    }
+  });
+  // Cerrar carrito con botón
+  closeCartBtn.addEventListener('click', closeCart);
+
+  // Eliminar un producto del carrito
+  cartItemsDiv.addEventListener('click', e => {
+    if (e.target.classList.contains('remove-btn')) {
+      const id = Number(e.target.dataset.id);
+      removeFromCart(id);
+    }
+  });
+
+  // Finalizar compra
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) {
+      alert('Tu carrito está vacío. Agrega productos antes de finalizar la compra.');
+      return;
+    }
+    const name = userNameInput.value.trim();
+    const username = userUsernameInput.value.trim();
+    if (!name || !username) {
+      alert('Por favor, completa todos los campos del formulario.');
+      return;
+    }
+    alert(`Gracias por tu compra, ${name} (@${username})! Pronto nos pondremos en contacto.`);
+    cart = [];
+    updateCartCount();
+    renderCartItems();
+    userNameInput.value = '';
+    userUsernameInput.value = '';
+    closeCart();
+  });
+
+  // Enviar formulario de contacto (solo feedback)
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Gracias por contactarnos. Pronto responderemos tu mensaje.');
+    contactForm.reset();
+  });
+
+  // Inicialización
+  renderCatalog();
+  updateCartCount();
+  renderCartItems();
+</script>
 
 </body>
 </html>
+
